@@ -1,0 +1,70 @@
+/* ============================================================
+   PeakTravel — Color tokens
+   Derived 1:1 from Tulip Booking's design tokens (src/theme/tokens.ts).
+   PeakTravel is the premium parent brand: same trustworthy blue core,
+   but a deeper, more corporate "ink" navy as the primary brand anchor.
+   ============================================================ */
+
+:root {
+  /* ---- Brand blue ramp (from Tulip tokens.brand.blue*) ---- */
+  --pt-blue-50:  #EFF5FE;
+  --pt-blue-100: #DCE9FC;
+  --pt-blue-200: #B6D0F8;
+  --pt-blue-300: #7CAEF1;
+  --pt-blue-400: #3B82F6;
+  --pt-blue-500: #1967D2;  /* Tulip primary */
+  --pt-blue-600: #1557B0;
+  --pt-blue-700: #114A99;
+  --pt-blue-800: #0E3D7E;
+  --pt-blue-900: #0B2E5F;
+
+  /* ---- Corporate navy "ink" (PeakTravel parent-brand anchor) ---- */
+  --pt-ink-900: #081B3A;   /* deepest — dark hero backgrounds */
+  --pt-ink-800: #0B2E5F;
+  --pt-ink-700: #0E3D7E;
+
+  /* ---- Primary brand colors ---- */
+  --pt-primary:        #1967D2;   /* PeakTravel blue */
+  --pt-primary-hover:  #1557B0;
+  --pt-primary-active: #114A99;
+  --pt-on-primary:     #FFFFFF;
+  --pt-secondary:      #0B2E5F;   /* deep navy — corporate weight */
+
+  /* ---- Accent palette (Tulip's decorative service palette) ---- */
+  --pt-accent-sky:     #0EA5E9;
+  --pt-accent-amber:   #F59E0B;
+  --pt-accent-purple:  #7C3AED;
+  --pt-accent-emerald: #10B981;
+  --pt-accent-pink:    #EC4899;
+  --pt-accent-red:     #EF4444;
+  --pt-accent-teal:    #14B8A6;
+  --pt-gold:           #C8A24B;   /* premium metallic accent (parent brand) */
+
+  /* ---- Neutrals (light surfaces) ---- */
+  --pt-bg:          #F9FAFB;
+  --pt-bg-elev:     #FFFFFF;
+  --pt-bg-sunken:   #F3F4F6;
+  --pt-fg:          #1F2937;
+  --pt-fg-muted:    #717182;
+  --pt-fg-faint:    #9AA0AB;
+  --pt-border:      #ECECF0;
+  --pt-border-strong: #D9DBE2;
+
+  /* ---- Neutrals (dark surfaces) ---- */
+  --pt-dark-bg:        #0B1120;
+  --pt-dark-bg-elev:   #141C2F;
+  --pt-dark-bg-elev2:  #1A2236;
+  --pt-dark-fg:        #F8FAFC;
+  --pt-dark-fg-muted:  #94A3B8;
+  --pt-dark-border:    #1E293B;
+
+  /* ---- Semantic ---- */
+  --pt-success: #16A34A;
+  --pt-warning: #F59E0B;
+  --pt-danger:  #DC2626;
+  --pt-info:    #1967D2;
+
+  /* ---- Gradients ---- */
+  --pt-grad-hero: linear-gradient(135deg, #1967D2 0%, #1557B0 50%, #114A99 100%); /* @kind color */
+  --pt-grad-ink:  linear-gradient(160deg, #0B2E5F 0%, #081B3A 100%); /* @kind color */
+}

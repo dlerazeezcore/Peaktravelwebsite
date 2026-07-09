@@ -1,0 +1,5 @@
+/* PeakTravel webfonts — Outfit (display) + Plus Jakarta Sans (body).
+   Ported from Tulip Booking (@expo-google-fonts/outfit, @expo-google-fonts/plus-jakarta-sans).
+   Served from Google Fonts; @font-face declared so the compiler ships them to consumers. */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');

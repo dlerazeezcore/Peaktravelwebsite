@@ -1,0 +1,38 @@
+/* ============================================================
+   PeakTravel — Spacing, radius, shadow & motion tokens
+   Ported from Tulip Booking (tokens.space / radius / shadow / ease).
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (px) ---- */
+  --pt-space-1: 4px;
+  --pt-space-2: 8px;
+  --pt-space-3: 12px;
+  --pt-space-4: 16px;
+  --pt-space-5: 20px;
+  --pt-space-6: 24px;
+  --pt-space-7: 32px;
+  --pt-space-8: 40px;
+  --pt-space-9: 48px;
+  --pt-space-10: 64px;
+
+  /* ---- Corner radius ---- */
+  --pt-radius-xs:   6px;
+  --pt-radius-sm:   10px;
+  --pt-radius-md:   14px;
+  --pt-radius-lg:   20px;
+  --pt-radius-xl:   28px;
+  --pt-radius-pill: 999px;
+
+  /* ---- Elevation (light) — soft, low-spread, cool-shadowed ---- */
+  --pt-shadow-1: 0 1px 2px rgba(15,23,42,0.04);
+  --pt-shadow-2: 0 4px 12px rgba(15,23,42,0.06);
+  --pt-shadow-3: 0 12px 32px rgba(15,23,42,0.10);
+  --pt-shadow-glow: 0 8px 24px rgba(25,103,210,0.22);  /* primary-button glow */
+
+  /* ---- Motion ---- */
+  --pt-ease: cubic-bezier(0.2, 0.8, 0.2, 1); /* @kind other */
+  --pt-dur-fast: 140ms; /* @kind other */
+  --pt-dur: 240ms; /* @kind other */
+  --pt-dur-slow: 420ms; /* @kind other */
+}
