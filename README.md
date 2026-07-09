@@ -13,5 +13,5 @@ Static single-page site, hosted on GitHub Pages.
 ## Notes
 
 - Fonts: Outfit + Plus Jakarta Sans via Google Fonts (same as the design system).
-- Contact form opens the visitor's email app with a prefilled message to info@peaktravel.net (no backend needed).
+- Contact form delivers submissions by email to contactform@peaktravel.net via FormSubmit (formsubmit.co) — no backend needed. The first submission triggers a one-time activation email to that inbox.
 - Design source: Claude Design project "PeakTravel Website".

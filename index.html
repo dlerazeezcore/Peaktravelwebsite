@@ -711,6 +711,7 @@
       <div class="field"><label>Email</label><input type="email" name="email" placeholder="jane@email.com" required></div>
       <div class="field"><label>Destination of interest</label><input type="text" name="destination" placeholder="Kyoto, Japan"></div>
       <div class="field"><label>How can we help?</label><textarea rows="4" name="message" placeholder="We're planning a 10-day anniversary trip in spring…"></textarea></div>
+      <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
       <button class="btn btn-gold" type="submit" id="pt-submit">Request a consultation</button>
     </form>
   </div>
@@ -845,25 +846,41 @@
     }, 2800);
   }
 
-  // Static-host contact form: opens the visitor's email app with a
-  // prefilled message to info@peaktravel.net (no backend required).
-  function ptSubmit(e){
+  // Contact form -> FormSubmit (formsubmit.co): delivers each submission
+  // by email to contactform@peaktravel.net. No backend needed on a static
+  // host. First-ever submission triggers a one-time activation email to
+  // that inbox; after activating, all submissions arrive automatically.
+  async function ptSubmit(e){
     e.preventDefault();
     const f = e.target;
     const v = n => (f.elements[n] ? f.elements[n].value.trim() : '');
-    const dest = v('destination');
-    const subject = 'Trip inquiry' + (dest ? ' - ' + dest : '') + ' | peaktravel.net';
-    const body =
-      'Name: ' + v('firstName') + ' ' + v('lastName') + '\n' +
-      'Email: ' + v('email') + '\n' +
-      (dest ? 'Destination: ' + dest + '\n' : '') +
-      (v('message') ? '\n' + v('message') + '\n' : '') +
-      '\nSent from the peaktravel.net contact form';
-    window.location.href = 'mailto:info@peaktravel.net?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     const b = document.getElementById('pt-submit');
-    b.textContent = 'Opening your email app — thank you ✓';
-    b.style.background = '#16A34A'; b.style.color = '#fff';
-    setTimeout(()=>{ f.reset(); b.textContent='Request a consultation'; b.style.background=''; b.style.color=''; }, 2600);
+    const dest = v('destination');
+    b.textContent = 'Sending…'; b.disabled = true;
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/contactform@peaktravel.net', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          name: v('firstName') + ' ' + v('lastName'),
+          email: v('email'),
+          destination: dest,
+          message: v('message'),
+          _honey: v('_honey'),
+          _subject: 'Trip inquiry' + (dest ? ' - ' + dest : '') + ' | peaktravel.net',
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+      if (!res.ok) throw new Error('send failed: ' + res.status);
+      b.textContent = "Thank you — we'll be in touch ✓";
+      b.style.background = '#16A34A'; b.style.color = '#fff';
+      setTimeout(()=>{ f.reset(); b.textContent='Request a consultation'; b.style.background=''; b.style.color=''; b.disabled=false; }, 2600);
+    } catch (err) {
+      b.textContent = 'Could not send — please email info@peaktravel.net';
+      b.style.background = '#DC2626'; b.style.color = '#fff';
+      setTimeout(()=>{ b.textContent='Request a consultation'; b.style.background=''; b.style.color=''; b.disabled=false; }, 3200);
+    }
   }
 
   // cursor spotlight on dark panels (writes --mx/--my)
