@@ -68,70 +68,129 @@
   .btn-ghost.light { color: #fff; border-color: rgba(255,255,255,.3); }
   .btn-ghost.light:hover { border-color: #fff; background: rgba(255,255,255,.06); }
 
-  /* ---------- Header ---------- */
+  /* ---------- Header (fixed, transparent over hero) ---------- */
   header {
-    position: sticky; top: 0; z-index: 50;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
     background: rgba(255,255,255,.82); backdrop-filter: saturate(180%) blur(14px);
-    border-bottom: 1px solid transparent; transition: border-color var(--pt-dur), box-shadow var(--pt-dur);
+    border-bottom: 1px solid transparent;
+    transition: background .35s var(--pt-ease), border-color .35s, box-shadow .35s;
   }
   header.scrolled { border-bottom-color: var(--line); box-shadow: 0 1px 0 rgba(15,23,42,.02); }
+  header.clear { background: transparent; backdrop-filter: none; }
+  header.clear .logo .peak { color: #fff; }
+  header.clear .logo .travel { color: rgba(255,255,255,.72); }
   .nav { display: flex; align-items: center; justify-content: space-between; height: 76px; }
-  .nav-links { display: flex; align-items: center; gap: 34px; }
-  .nav-links a {
-    font-size: 15px; font-weight: 500; color: #3C4655; position: relative; padding: 4px 0;
-    transition: color var(--pt-dur);
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .menu-trigger {
+    display: inline-flex; align-items: center; gap: 11px; padding: 11px 18px;
+    border-radius: var(--pt-radius-pill); border: 1px solid #D7DBE2; background: transparent;
+    color: var(--ink); font-family: var(--pt-font-body); font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: all var(--pt-dur) var(--pt-ease);
   }
-  .nav-links a::after {
-    content: ""; position: absolute; left: 0; right: 100%; bottom: -2px; height: 2px;
-    background: var(--gold); transition: right var(--pt-dur) var(--pt-ease);
+  .menu-trigger:hover { border-color: var(--gold); color: var(--gold); box-shadow: 0 0 20px -6px rgba(200,162,75,.5); }
+  header.clear .menu-trigger { color: #fff; border-color: rgba(255,255,255,.4); }
+  header.clear .menu-trigger:hover { border-color: var(--gold-soft); color: var(--gold-soft); }
+  .mt-icon { position: relative; width: 18px; height: 12px; display: inline-block; }
+  .mt-icon i { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: currentColor; transition: transform .3s var(--pt-ease), top .3s var(--pt-ease); }
+  .mt-icon i:first-child { top: 1px; }
+  .mt-icon i:last-child { top: 9px; }
+  @media (max-width: 880px) { .nav-cta { display: none; } }
+
+  /* ---------- Fullscreen menu takeover ---------- */
+  .mega {
+    position: fixed; inset: 0; z-index: 100; overflow: hidden;
+    background: radial-gradient(130% 100% at 80% 0%, #14305e 0%, #0b2347 46%, #081a36 100%);
+    clip-path: inset(0 0 100% 0); visibility: hidden;
+    transition: clip-path .65s var(--pt-ease), visibility 0s linear .65s;
   }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-links a:hover::after, .nav-links a.active::after { right: 0; }
-  .nav-links a.active { color: var(--ink); }
-  .nav-right { display: flex; align-items: center; gap: 18px; }
-  .menu-btn { display: none; background: none; border: 0; cursor: pointer; padding: 4px; }
-  .mobile-menu { display: none; }
+  .mega.open { clip-path: inset(0 0 0% 0); visibility: visible; transition: clip-path .65s var(--pt-ease); }
+  .mega-shell { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+  .mega-top { display: flex; align-items: center; justify-content: space-between; height: 76px; flex: none; }
+  .mega-close { width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); background: transparent; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--pt-dur) var(--pt-ease); }
+  .mega-close:hover { border-color: var(--gold); color: var(--gold-soft); box-shadow: 0 0 22px -6px rgba(200,162,75,.6); transform: rotate(90deg); }
+  .mega-inner { flex: 1; display: grid; grid-template-columns: 1.05fr .95fr; gap: 60px; align-items: center; min-height: 0; }
+  .mega-links { display: flex; flex-direction: column; gap: 4px; }
+  .mega-links a {
+    display: flex; align-items: baseline; gap: 18px; padding: 7px 0;
+    font-family: var(--pt-font-display); font-weight: 700; font-size: clamp(32px, 4.4vw, 52px);
+    letter-spacing: -0.03em; line-height: 1.06; color: #fff;
+    opacity: 0; transform: translateY(26px);
+    transition: color .24s var(--pt-ease), transform .24s var(--pt-ease), opacity .3s var(--pt-ease);
+  }
+  .mega.open .mega-links a { opacity: 1; transform: none; animation: megaIn .55s var(--pt-ease) backwards; animation-delay: calc(.14s + var(--i) * 55ms); }
+  @keyframes megaIn { from { opacity: 0; transform: translateY(26px); } }
+  .mega-links a i { font-style: normal; font-family: var(--pt-font-body); font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--gold); flex: none; }
+  .mega-links a:hover { color: var(--gold-soft); transform: translateX(12px); }
+  .mega-visual { position: relative; height: min(62vh, 540px); border-radius: 20px; overflow: hidden; box-shadow: var(--pt-shadow-3); opacity: 0; transform: translateY(18px) scale(.985); transition: opacity .5s var(--pt-ease), transform .5s var(--pt-ease); }
+  .mega.open .mega-visual { opacity: 1; transform: none; transition-delay: .3s; }
+  .mv-img { position: absolute; inset: 0; background-position: center; background-size: cover; opacity: 0; transform: scale(1.06); transition: opacity .45s ease, transform .9s var(--pt-ease); }
+  .mv-img.on { opacity: 1; transform: scale(1); }
+  .mv-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,26,54,.55), transparent 42%); }
+  .mega-foot { flex: none; display: flex; justify-content: space-between; gap: 18px; padding-bottom: 30px; color: #9DB0C8; font-size: 13.5px; flex-wrap: wrap; }
+  .mega-foot b { color: #E7ECF4; font-weight: 600; }
   @media (max-width: 880px) {
-    .nav-links { display: none; }
-    .nav-cta { display: none; }
-    .menu-btn { display: inline-flex; }
-    .mobile-menu { display: flex; flex-direction: column; gap: 4px; max-height: 0; overflow: hidden; transition: max-height .36s var(--pt-ease); background: rgba(255,255,255,.97); backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid var(--line); padding: 0 32px; }
-    .mobile-menu.open { max-height: 420px; padding: 10px 32px 22px; }
-    .mobile-menu a { font-size: 16px; font-weight: 500; color: #2A3340; padding: 13px 2px; border-bottom: 1px solid #F0F2F5; }
-    .mobile-menu a.btn { border-bottom: 0; color: #fff; }
+    .mega-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; padding-top: 4vh; }
+    .mega-visual { display: none; }
+    .mega-links a { font-size: clamp(30px, 8.4vw, 44px); }
+    .mega-foot { flex-direction: column; gap: 8px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mega { clip-path: none; transition: none; }
+    .mega.open { transition: none; }
+    .mega-links a { opacity: 1; transform: none; }
+    .mega.open .mega-links a { animation: none; }
+    .mega-visual, .mega.open .mega-visual { opacity: 1; transform: none; transition: none; }
   }
 
-  /* ---------- Hero ---------- */
-  .hero { position: relative; overflow: hidden; padding: 88px 0 96px; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
-  .hero h1 {
+  /* ---------- Cinematic hero ---------- */
+  .cine-hero { position: relative; min-height: 100vh; padding: 0; display: flex; align-items: stretch; overflow: hidden; background: #081a36; }
+  .cine-media { position: absolute; inset: 0; }
+  .cine-slide { position: absolute; inset: 0; background-position: center; background-size: cover; opacity: 0; transition: opacity 1.2s ease; transform: scale(1.1); }
+  .cine-slide.on { opacity: 1; z-index: 1; }
+  @media (prefers-reduced-motion: no-preference) { .cine-slide.on { animation: kb 8s linear forwards; } }
+  @keyframes kb { from { transform: scale(1.02); } to { transform: scale(1.14); } }
+  .cine-scrim { position: absolute; inset: 0; z-index: 2; background: linear-gradient(78deg, rgba(6,18,38,.93) 0%, rgba(6,18,38,.62) 42%, rgba(8,26,54,.28) 72%, rgba(8,26,54,.42) 100%); }
+  .cine-scrim::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(6,18,38,.6), transparent 34%); }
+  .cine-content { position: relative; z-index: 3; display: flex; flex-direction: column; justify-content: center; width: 100%; padding-top: 150px; padding-bottom: 130px; min-height: 100vh; }
+  .cine-hero h1 {
     font-family: var(--pt-font-display); font-weight: 700;
-    font-size: clamp(40px, 6vw, 72px); line-height: 1.02; letter-spacing: -0.035em;
-    margin: 0 0 22px; color: var(--ink);
+    font-size: clamp(42px, 6.2vw, 78px); line-height: 1.02; letter-spacing: -0.035em;
+    margin: 0 0 22px; color: #fff; max-width: 15ch;
   }
-  .hero h1 .em { color: var(--gold); }
-  .hero .lead { margin-bottom: 32px; }
+  .cine-hero h1 .em { color: var(--gold-soft); }
+  .cine-hero .lead { color: #C9D4E4; max-width: 52ch; margin-bottom: 34px; }
   .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
-  .hero-stats { display: flex; gap: 40px; margin-top: 46px; padding-top: 30px; border-top: 1px solid var(--line); }
-  .stat .n { font-family: var(--pt-font-display); font-weight: 700; font-size: 34px; letter-spacing: -0.02em; color: var(--ink); }
-  .stat .l { font-size: 13.5px; color: var(--gray); margin-top: 2px; }
-  .hero-visual { position: relative; }
-  .hero-visual image-slot { width: 100%; height: 540px; box-shadow: var(--pt-shadow-3); }
-  .hero-badge {
-    position: absolute; left: -26px; bottom: 40px; background: #fff;
-    border-radius: var(--pt-radius-md); box-shadow: var(--pt-shadow-3);
-    padding: 16px 20px; display: flex; align-items: center; gap: 13px;
-  }
-  .hero-badge .ring { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-family: var(--pt-font-display); font-weight: 700; color: var(--ink); }
-  .hero-badge .t1 { font-weight: 700; font-size: 14px; color: var(--ink); }
-  .hero-badge .t2 { font-size: 12px; color: var(--gray); }
+  .hero-stats { display: flex; gap: 46px; margin-top: 52px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,.2); flex-wrap: wrap; }
+  .stat .n { font-family: var(--pt-font-display); font-weight: 700; font-size: 34px; letter-spacing: -0.02em; color: #fff; }
+  .stat .l { font-size: 13.5px; color: #A9B7CB; margin-top: 2px; }
+  .eyebrow-chip.glass { background: rgba(8,26,54,.42); border-color: rgba(255,255,255,.24); color: #E7ECF4; backdrop-filter: blur(8px); box-shadow: none; }
+  .cine-side { position: absolute; right: 42px; bottom: 34px; z-index: 4; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .cine-cap { font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #D6DEEA; transition: opacity .3s ease; }
+  .cine-cap::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-right: 9px; vertical-align: 1px; }
+  .cine-bars { display: flex; gap: 8px; }
+  .cine-bars span { width: 46px; height: 2px; border-radius: 2px; background: rgba(255,255,255,.28); overflow: hidden; }
+  .cine-bars span i { display: block; height: 100%; width: 0; background: var(--gold); }
+  @media (prefers-reduced-motion: no-preference) { .cine-bars span.on i { animation: fillbar 6.5s linear forwards; } }
+  @media (prefers-reduced-motion: reduce) { .cine-bars span.on i { width: 100%; } }
+  @keyframes fillbar { from { width: 0; } to { width: 100%; } }
   @media (max-width: 880px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
-    .hero-visual image-slot { height: 360px; }
+    .cine-content { padding-top: 130px; padding-bottom: 110px; }
+    .cine-side { right: 24px; bottom: 22px; }
+    .hero-stats { gap: 28px 40px; }
   }
+
+  /* ---------- Media bands ---------- */
+  .band { position: relative; overflow: hidden; padding: 0; height: 58vh; min-height: 420px; max-height: 640px; display: flex; align-items: center; }
+  .band-img { position: absolute; left: 0; right: 0; top: -16%; bottom: -16%; background-position: center; background-size: cover; will-change: transform; }
+  .band-scrim { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(8,26,54,.9) 6%, rgba(8,26,54,.5) 52%, rgba(8,26,54,.24) 100%); }
+  .band-content { position: relative; z-index: 1; width: 100%; }
+  .band h2 { font-family: var(--pt-font-display); font-weight: 700; font-size: clamp(34px, 4.6vw, 58px); letter-spacing: -0.03em; line-height: 1.04; color: #fff; margin: 0; max-width: 17ch; }
+  .band h2 .em { color: var(--gold-soft); }
+  .band .sub { margin: 16px 0 0; font-size: 17px; color: #C9D4E4; }
+  .band .btn { margin-top: 26px; }
 
   /* ---------- Section base ---------- */
-  section { padding: 96px 0; }
+  section { padding: 96px 0; scroll-margin-top: 78px; }
   .section-head { max-width: 720px; margin: 0 auto 56px; text-align: center; }
   .section-head .lead { margin: 0 auto; }
 
@@ -436,47 +495,185 @@
   @media (max-width:980px){ }
   @media (prefers-reduced-motion: reduce){ .eyebrow-chip .livedot::after { animation:none; } .spotlight { display:none; } }
 
+  /* ============================================================
+     TULIP APP TOUR — app-screen showcase cards (FIB-inspired).
+     Alternating soft-tint panels; an upright phone bleeds from the
+     top edge, paired with a caption block and a gold underline link.
+     Navy + gold house chrome; Tulip blue stays inside the screens.
+     ============================================================ */
+  #tulip-tour { background: var(--bg); }
+  .tour-head { max-width: 720px; margin: 0 auto 46px; text-align: center; }
+  .tour-head .rule { margin: 0 auto 20px; }
+  .tour { display: grid; gap: 26px; }
+  .tour-card { position: relative; display: grid; grid-template-columns: 1.02fr 1fr; align-items: stretch; min-height: 470px; border-radius: var(--pt-radius-xl); overflow: hidden; border: 1px solid var(--line); }
+  .tour-card.tint-blue { background: radial-gradient(120% 130% at 14% 0%, #F2F7FE 0%, #E6EEFB 100%); }
+  .tour-card.tint-gold { background: radial-gradient(120% 130% at 86% 0%, #FBF7EC 0%, #F4ECD9 100%); }
+  .tour-card.tint-navy { background: radial-gradient(130% 120% at 80% 0%, #14305e 0%, #0b2347 46%, #081a36 100%); border-color: transparent; color: #fff; }
+  .tc-media { position: relative; overflow: hidden; }
+  .tc-phone { position: absolute; left: 50%; top: 58px; transform: translateX(-50%); width: 258px; height: 548px; border-radius: 42px; background: linear-gradient(155deg,#20262E,#0d1116); padding: 11px; box-shadow: 0 44px 90px -34px rgba(8,20,44,.72), 0 0 0 1px rgba(255,255,255,.05) inset; transition: transform .45s var(--pt-ease); }
+  .tour-card:hover .tc-phone { transform: translateX(-50%) translateY(-8px); }
+  .tc-phone .screen { position: relative; width: 100%; height: 100%; border-radius: 32px; overflow: hidden; background: #0e1420; }
+  .tc-phone .notch { position:absolute; top:12px; left:50%; transform:translateX(-50%); width:86px; height:23px; background:#0c1015; border-radius:0 0 15px 15px; z-index:4; }
+  .tc-body { display: flex; flex-direction: column; justify-content: center; padding: 52px 56px; }
+  .tc-body .eyebrow { color: var(--gold); }
+  .tint-navy .tc-body .eyebrow { color: var(--gold-soft); }
+  .tc-body h3 { font-family: var(--pt-font-display); font-weight: 700; font-size: clamp(26px, 3vw, 36px); letter-spacing: -0.025em; line-height: 1.06; margin: 0 0 15px; color: var(--ink); }
+  .tint-navy .tc-body h3 { color: #fff; }
+  .tc-body p { font-size: 16px; line-height: 1.7; color: #56606E; margin: 0 0 26px; max-width: 42ch; }
+  .tint-navy .tc-body p { color: #B8C2D2; }
+  .tc-cta { display: inline-flex; align-items: center; gap: 9px; font-family: var(--pt-font-body); font-weight: 600; font-size: 15px; color: var(--ink); width: fit-content; padding-bottom: 4px; border-bottom: 2px solid var(--gold); transition: gap var(--pt-dur) var(--pt-ease), color var(--pt-dur) var(--pt-ease); }
+  .tint-navy .tc-cta { color: #fff; }
+  .tc-cta svg { color: var(--gold); }
+  .tc-cta:hover { gap: 15px; color: var(--gold); }
+  .tint-navy .tc-cta:hover { color: var(--gold-soft); }
+  .tour-card.phone-right .tc-media { order: 2; }
+  .tour-card.phone-right .tc-body { order: 1; }
+  @media (max-width: 900px) {
+    .tour-card, .tour-card.phone-right { grid-template-columns: 1fr; min-height: 0; }
+    .tc-media { order: 0 !important; height: 366px; }
+    .tc-body { order: 1 !important; padding: 34px 30px 40px; }
+    .tc-phone { top: 46px; width: 236px; height: 496px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .tour-card:hover .tc-phone { transform: translateX(-50%); } }
+
+  /* flight-results screen */
+  .fr { flex:1; display:flex; flex-direction:column; background:#F9FAFB; overflow:hidden; }
+  .fr-top { display:flex; align-items:center; gap:10px; padding:6px 14px 10px; }
+  .fr-top .bk { width:30px; height:30px; border-radius:9px; background:#fff; border:1px solid #ECECF0; display:flex; align-items:center; justify-content:center; color:#1967D2; flex:none; }
+  .fr-top .rt { flex:1; }
+  .fr-top .rt b { font-family:var(--pt-font-display); font-weight:700; font-size:14.5px; color:#1F2937; display:block; letter-spacing:-0.01em; }
+  .fr-top .rt span { font-size:10px; color:#94A0B0; }
+  .fr-sort { display:flex; gap:6px; padding:0 14px 8px; }
+  .fr-chip { font-size:10px; font-weight:600; padding:6px 11px; border-radius:999px; background:#fff; border:1px solid #ECECF0; color:#5B6573; }
+  .fr-chip.on { background:#1967D2; color:#fff; border-color:#1967D2; }
+  .fr-list { flex:1; overflow:hidden; padding:2px 14px; display:flex; flex-direction:column; gap:9px; }
+  .fr-card { background:#fff; border:1px solid #ECECF0; border-radius:14px; padding:12px 13px; box-shadow:0 6px 16px -12px rgba(15,23,42,.25); }
+  .fr-card.best { border-color:#BBD3F5; box-shadow:0 8px 20px -12px rgba(25,103,210,.4); }
+  .fr-row { display:flex; align-items:center; justify-content:space-between; }
+  .fr-air { display:flex; align-items:center; gap:8px; }
+  .fr-air .lg { width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:var(--pt-font-display); font-weight:700; font-size:10px; color:#fff; flex:none; }
+  .fr-air .nm { font-size:11px; font-weight:600; color:#1F2937; line-height:1.15; }
+  .fr-air .nm small { display:block; font-size:9px; color:#94A0B0; font-weight:500; }
+  .fr-price { text-align:right; }
+  .fr-price b { font-family:var(--pt-font-display); font-weight:700; font-size:16px; color:#1F2937; }
+  .fr-price small { display:block; font-size:8.5px; color:#94A0B0; }
+  .fr-time { display:flex; align-items:center; gap:10px; margin-top:11px; }
+  .fr-time .h { font-family:var(--pt-font-display); font-weight:700; font-size:14.5px; color:#1F2937; }
+  .fr-time .path { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .fr-time .path .dur { font-size:9px; color:#94A0B0; }
+  .fr-time .path .ln { width:100%; height:1px; background:#E3E7EE; position:relative; }
+  .fr-time .path .ln::after { content:""; position:absolute; right:0; top:-2px; width:4px; height:4px; border-radius:50%; background:#1967D2; }
+  .fr-time .path .stp { font-size:9px; color:#16A34A; font-weight:600; }
+  .fr-badge { display:inline-block; font-size:8.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:#1967D2; background:#EAF1FC; padding:3px 7px; border-radius:6px; margin-bottom:9px; }
+
+  /* concierge chat screen */
+  .cc { flex:1; display:flex; flex-direction:column; background:#F4F6F9; overflow:hidden; }
+  .cc-head { display:flex; align-items:center; gap:10px; padding:6px 14px 11px; background:#fff; border-bottom:1px solid #EEF1F5; }
+  .cc-head .bk { color:#1967D2; flex:none; display:flex; }
+  .cc-head .av { width:34px; height:34px; border-radius:50%; background:linear-gradient(135deg,#3B82F6,#0E3D7E); position:relative; flex:none; }
+  .cc-head .av .on { position:absolute; right:-1px; bottom:-1px; width:9px; height:9px; border-radius:50%; background:#16A34A; border:2px solid #fff; }
+  .cc-head .who b { font-size:12.5px; font-weight:700; color:#1F2937; display:block; }
+  .cc-head .who span { font-size:10px; color:#16A34A; font-weight:600; }
+  .cc-body { flex:1; overflow:hidden; padding:13px 13px 0; display:flex; flex-direction:column; gap:8px; }
+  .cc-day { text-align:center; font-size:9.5px; color:#94A0B0; font-weight:600; margin:2px 0 4px; }
+  .cc-msg { max-width:80%; font-size:11.5px; line-height:1.5; padding:9px 12px; border-radius:14px; }
+  .cc-msg.them { align-self:flex-start; background:#fff; color:#1F2937; border:1px solid #ECECF0; border-bottom-left-radius:5px; }
+  .cc-msg.me { align-self:flex-end; background:#1967D2; color:#fff; border-bottom-right-radius:5px; }
+  .cc-sug { align-self:flex-start; width:84%; background:#fff; border:1px solid #ECECF0; border-radius:14px; padding:11px; box-shadow:0 8px 18px -13px rgba(15,23,42,.3); }
+  .cc-sug .r1 { display:flex; align-items:center; gap:7px; }
+  .cc-sug .r1 .lg { width:22px; height:22px; border-radius:6px; background:#C90A17; color:#fff; font-family:var(--pt-font-display); font-weight:700; font-size:9px; display:flex; align-items:center; justify-content:center; flex:none; }
+  .cc-sug .r1 b { font-size:11px; font-weight:700; color:#1F2937; }
+  .cc-sug .r2 { font-size:10px; color:#5B6573; margin:6px 0 0; }
+  .cc-sug .cf { margin-top:9px; background:#1967D2; color:#fff; text-align:center; font-size:10.5px; font-weight:700; padding:8px; border-radius:9px; }
+  .cc-input { display:flex; align-items:center; gap:8px; padding:9px 12px 13px; background:#fff; border-top:1px solid #EEF1F5; }
+  .cc-input .box { flex:1; font-size:11px; color:#9AA0AB; background:#F1F3F6; border-radius:999px; padding:9px 13px; }
+  .cc-input .snd { width:32px; height:32px; border-radius:50%; background:#1967D2; color:#fff; display:flex; align-items:center; justify-content:center; flex:none; }
+
+  /* itinerary / trip timeline screen */
+  .tt { flex:1; display:flex; flex-direction:column; background:#F9FAFB; overflow:hidden; }
+  .tt-head { padding:8px 16px 12px; }
+  .tt-head small { font-size:11px; color:#717182; font-weight:600; letter-spacing:.02em; }
+  .tt-head h1 { font-family:var(--pt-font-display); font-weight:700; font-size:21px; letter-spacing:-0.02em; color:#1F2937; margin:3px 0 0; }
+  .tt-head .meta { display:flex; align-items:center; gap:6px; margin-top:6px; font-size:11px; color:#1967D2; font-weight:600; }
+  .tt-body { flex:1; overflow:hidden; padding:4px 16px; display:flex; flex-direction:column; gap:11px; }
+  .tt-card { position:relative; background:#fff; border:1px solid #ECECF0; border-radius:14px; padding:12px 13px 12px 44px; box-shadow:0 4px 12px -10px rgba(15,23,42,.22); }
+  .tt-card .dot { position:absolute; left:15px; top:14px; width:18px; height:18px; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#fff; z-index:1; }
+  .tt-card .when { font-size:9.5px; color:#94A0B0; font-weight:600; letter-spacing:.03em; text-transform:uppercase; }
+  .tt-card .ct { font-size:13px; font-weight:600; color:#1F2937; margin:2px 0 3px; }
+  .tt-card .sub { font-size:10.5px; color:#5B6573; }
+  .tt-card .tag { position:absolute; right:12px; top:12px; font-size:9px; font-weight:700; padding:3px 7px; border-radius:6px; }
+  .tt-line { position:absolute; left:23.5px; top:32px; bottom:-11px; width:2px; background:#E3E7EE; z-index:0; }
+
 </style>
 </head>
 <body>
 
-<header id="top">
+<header id="top" class="clear">
   <div class="wrap nav">
-    <a href="#top" class="logo"><span class="peak">Peak</span><span class="travel">Travel</span></a>
-    <nav class="nav-links">
-      <a href="#services">Services</a>
-      <a href="#destinations">Destinations</a>
-      <a href="#tulip">Tulip App</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
+    <a href="#home" class="logo"><span class="peak">Peak</span><span class="travel">Travel</span></a>
     <div class="nav-right">
-      <a href="#contact" class="btn btn-primary nav-cta">Plan a Trip</a>
-      <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" onclick="toggleMenu()">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#0B2040" stroke-width="2" stroke-linecap="round"><path id="mi1" d="M4 7h16"/><path id="mi2" d="M4 12h16"/><path id="mi3" d="M4 17h16"/></svg>
+      <a href="#contact" class="btn btn-gold nav-cta">Plan a Trip</a>
+      <button class="menu-trigger" id="megaBtn" aria-expanded="false" aria-label="Open menu" onclick="toggleMega()">
+        <span class="mt-label">Menu</span>
+        <span class="mt-icon"><i></i><i></i></span>
       </button>
     </div>
   </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#tulip" onclick="closeMenu()">Tulip App</a>
-    <a href="#services" onclick="closeMenu()">Services</a>
-    <a href="#destinations" onclick="closeMenu()">Destinations</a>
-    <a href="#about" onclick="closeMenu()">About</a>
-    <a href="#contact" onclick="closeMenu()">Contact</a>
-    <a href="#contact" class="btn btn-primary" onclick="closeMenu()" style="justify-content:center;margin-top:6px;">Plan a Trip</a>
-  </div>
 </header>
 
+<!-- FULLSCREEN MENU -->
+<div class="mega" id="mega" aria-hidden="true" data-screen-label="Menu overlay">
+  <div class="gridlines"></div>
+  <div class="glowfield"><span class="g g-gold" style="width:520px;height:520px;right:-180px;top:-180px;"></span><span class="g g-blue" style="width:520px;height:520px;left:-180px;bottom:-200px;"></span></div>
+  <div class="wrap mega-shell">
+    <div class="mega-top">
+      <a href="#home" class="logo" onclick="closeMega()"><span class="peak" style="color:#fff;">Peak</span><span class="travel" style="color:#9AA3B0;">Travel</span></a>
+      <button class="mega-close" onclick="closeMega()" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+    </div>
+    <div class="mega-inner">
+      <nav class="mega-links">
+        <a href="#home" style="--i:0;" data-mv="0" onclick="closeMega()"><i>01</i>Home</a>
+        <a href="#tulip" style="--i:1;" data-mv="1" onclick="closeMega()"><i>02</i>Tulip App</a>
+        <a href="#services" style="--i:2;" data-mv="2" onclick="closeMega()"><i>03</i>Services</a>
+        <a href="#destinations" style="--i:3;" data-mv="3" onclick="closeMega()"><i>04</i>Destinations</a>
+        <a href="#about" style="--i:4;" data-mv="4" onclick="closeMega()"><i>05</i>About</a>
+        <a href="#contact" style="--i:5;" data-mv="5" onclick="closeMega()"><i>06</i>Contact</a>
+      </nav>
+      <div class="mega-visual" aria-hidden="true">
+        <div class="mv-img on" style="background-image:url('https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-img" style="background-image:url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-img" style="background-image:url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-img" style="background-image:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-img" style="background-image:url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-img" style="background-image:url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1100&q=80');"></div>
+        <div class="mv-scrim"></div>
+      </div>
+    </div>
+    <div class="mega-foot">
+      <span><b>info@peaktravel.net</b></span>
+      <span>+964 750 720 1111</span>
+      <span>Erbil · Kurdistan Region</span>
+    </div>
+  </div>
+</div>
+
 <!-- HERO -->
-<section class="hero" style="padding-top:64px;">
-  <div class="wrap hero-grid">
-    <div class="reveal">
-      <div class="eyebrow-chip"><span class="livedot"></span>Premium travel house · Est. 2014</div>
+<section class="cine-hero" id="home" data-screen-label="Cinematic hero">
+  <div class="cine-media" aria-hidden="true">
+    <div class="cine-slide on" style="background-image:url('https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="cine-slide" style="background-image:url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="cine-slide" style="background-image:url('https://images.unsplash.com/photo-1531366936337-7c912a4589a7?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="cine-slide" style="background-image:url('https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1800&q=80');"></div>
+    <div class="cine-scrim"></div>
+  </div>
+  <div class="wrap cine-content">
+    <div>
+      <div class="eyebrow-chip glass"><span class="livedot"></span>Premium travel house · Est. 2014</div>
       <h1>Journeys, <span class="em">curated</span> to the last detail<span class="em">.</span></h1>
       <p class="lead">PeakTravel designs bespoke leisure and corporate travel for people who value their time. From first idea to final mile — planned, managed and looked after by one dedicated team.</p>
       <div class="hero-cta">
-        <a href="#contact" class="btn btn-primary">Start planning</a>
-        <a href="#tulip" class="btn btn-ghost">Explore the Tulip app</a>
+        <a href="#contact" class="btn btn-gold">Start planning</a>
+        <a href="#tulip" class="btn btn-ghost light">Explore the Tulip app</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="n">68k+</div><div class="l">Journeys curated</div></div>
@@ -484,43 +681,10 @@
         <div class="stat"><div class="n">4.9★</div><div class="l">Average rating</div></div>
       </div>
     </div>
-    <div class="hero-visual reveal">
-      <div class="hero-panel has-spot" style="position:relative;height:540px;border-radius:20px;overflow:hidden;box-shadow:var(--pt-shadow-3);background:radial-gradient(130% 100% at 82% 6%, #18386e 0%, #0d2347 46%, #081a36 100%);">
-        <div class="gridlines"></div>
-        <div class="glowfield"><span class="g g-blue" style="width:340px;height:340px;left:-150px;bottom:-150px;"></span></div>
-        <div class="spotlight"></div>
-        <!-- decorative gold arcs / horizon -->
-        <div style="position:absolute;right:-180px;top:-160px;width:420px;height:420px;border-radius:50%;border:1px solid rgba(200,162,75,.30);"></div>
-        <div style="position:absolute;right:-120px;top:-100px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(200,162,75,.22);"></div>
-        <div style="position:absolute;left:-120px;bottom:-150px;width:340px;height:340px;border-radius:50%;border:1px solid rgba(255,255,255,.07);"></div>
-        <div style="position:absolute;inset:0;background:radial-gradient(60% 50% at 78% 12%, rgba(200,162,75,.20), transparent 70%);"></div>
-        <!-- glass itinerary card -->
-        <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:330px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(10px);border-radius:18px;padding:24px 24px 22px;box-shadow:0 24px 60px -24px rgba(0,0,0,.6);">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
-            <span style="font-family:var(--pt-font-display);font-size:17px;letter-spacing:-0.01em;"><span style="font-weight:700;color:#fff;">Peak</span><span style="font-weight:400;color:#9AA3B0;">Travel</span></span>
-            <span style="font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#1b1405;background:var(--gold);padding:4px 9px;border-radius:6px;">Confirmed</span>
-          </div>
-          <div style="display:flex;align-items:flex-end;justify-content:space-between;">
-            <div><div style="font-family:var(--pt-font-display);font-weight:700;font-size:36px;color:#fff;line-height:1;">EBL</div><div style="font-size:11px;color:#9DB0C8;margin-top:5px;">Erbil</div></div>
-            <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:0 12px 10px;">
-              <span style="height:1px;flex:1;background:repeating-linear-gradient(90deg,rgba(200,162,75,.7) 0 5px,transparent 5px 10px);"></span>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--gold)"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"/></svg>
-              <span style="height:1px;flex:1;background:repeating-linear-gradient(90deg,rgba(200,162,75,.7) 0 5px,transparent 5px 10px);"></span>
-            </div>
-            <div style="text-align:right;"><div style="font-family:var(--pt-font-display);font-weight:700;font-size:36px;color:#fff;line-height:1;">DXB</div><div style="font-size:11px;color:#9DB0C8;margin-top:5px;">Dubai</div></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.12);">
-            <div><div style="font-size:10px;color:#8FA0B8;letter-spacing:.04em;">DEPART</div><div style="font-size:13.5px;color:#fff;font-weight:600;margin-top:3px;">12 Jun · 09:40</div></div>
-            <div style="text-align:center;"><div style="font-size:10px;color:#8FA0B8;letter-spacing:.04em;">CABIN</div><div style="font-size:13.5px;color:#fff;font-weight:600;margin-top:3px;">First</div></div>
-            <div style="text-align:right;"><div style="font-size:10px;color:#8FA0B8;letter-spacing:.04em;">SEAT</div><div style="font-size:13.5px;color:#fff;font-weight:600;margin-top:3px;">2A</div></div>
-          </div>
-        </div>
-      </div>
-      <div class="hero-badge">
-        <div class="ring"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13v-1a9 9 0 0 1 18 0v1"/><path d="M3 13a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M21 13a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2z"/><path d="M19 18v1a3 3 0 0 1-3 3h-2"/></svg></div>
-        <div><div class="t1">Dedicated concierge</div><div class="t2">Available 24 / 7, worldwide</div></div>
-      </div>
-    </div>
+  </div>
+  <div class="cine-side" aria-hidden="true">
+    <div class="cine-cap" id="cineCap">The coastlines</div>
+    <div class="cine-bars"><span class="on"><i></i></span><span><i></i></span><span><i></i></span><span><i></i></span></div>
   </div>
 </section>
 
@@ -613,6 +777,149 @@
   </div>
 </section>
 
+<!-- TULIP APP TOUR -->
+<section id="tulip-tour" data-screen-label="Tulip app tour">
+  <div class="wrap">
+    <div class="tour-head reveal">
+      <div class="rule center"></div>
+      <p class="eyebrow">Take the tour</p>
+      <h2 class="section-title">See Tulip in action</h2>
+      <p class="lead">A closer look at the app your advisor runs alongside you — search, itinerary and concierge, all in one place.</p>
+    </div>
+    <div class="tour">
+
+      <!-- Card 1 — search / flight results -->
+      <article class="tour-card tint-blue reveal">
+        <div class="tc-media">
+          <div class="tc-phone">
+            <div class="notch"></div>
+            <div class="screen"><div class="tb">
+              <div class="tb-status"><span>9:41</span><span class="sb"><i style="height:5px"></i><i style="height:7px"></i><i style="height:9px"></i></span></div>
+              <div class="fr">
+                <div class="fr-top">
+                  <span class="bk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></span>
+                  <div class="rt"><b>Erbil → Istanbul</b><span>Wed 14 May · 1 adult · Economy</span></div>
+                  <span class="bk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></span>
+                </div>
+                <div class="fr-sort"><span class="fr-chip on">Best</span><span class="fr-chip">Cheapest</span><span class="fr-chip">Fastest</span></div>
+                <div class="fr-list">
+                  <div class="fr-card best">
+                    <span class="fr-badge">Best value</span>
+                    <div class="fr-row"><div class="fr-air"><span class="lg" style="background:#C90A17">TK</span><span class="nm">Turkish Airlines<small>TK 7420</small></span></div><div class="fr-price"><b>$180</b><small>per person</small></div></div>
+                    <div class="fr-time"><span class="h">09:40</span><span class="path"><span class="dur">3h 35m</span><span class="ln"></span><span class="stp">Direct</span></span><span class="h">12:15</span></div>
+                  </div>
+                  <div class="fr-card">
+                    <div class="fr-row"><div class="fr-air"><span class="lg" style="background:#F5A623">PC</span><span class="nm">Pegasus<small>PC 512</small></span></div><div class="fr-price"><b>$132</b><small>per person</small></div></div>
+                    <div class="fr-time"><span class="h">06:15</span><span class="path"><span class="dur">3h 50m</span><span class="ln"></span><span class="stp">Direct</span></span><span class="h">09:05</span></div>
+                  </div>
+                  <div class="fr-card">
+                    <div class="fr-row"><div class="fr-air"><span class="lg" style="background:#5B2C86">QR</span><span class="nm">Qatar Airways<small>QR 419</small></span></div><div class="fr-price"><b>$214</b><small>per person</small></div></div>
+                    <div class="fr-time"><span class="h">15:20</span><span class="path"><span class="dur">6h 05m</span><span class="ln"></span><span class="stp" style="color:#94A0B0">1 stop · DOH</span></span><span class="h">21:25</span></div>
+                  </div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+        <div class="tc-body">
+          <p class="eyebrow">Search</p>
+          <h3>One search. The whole trip.</h3>
+          <p>Type where you're going once — Tulip pulls flights, stays, transfers and data together and sorts them the way you actually travel.</p>
+          <a class="tc-cta" href="https://tulipbookings.com" target="_blank" rel="noopener">See how search works <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Card 2 — trip itinerary -->
+      <article class="tour-card tint-gold phone-right reveal">
+        <div class="tc-media">
+          <div class="tc-phone">
+            <div class="notch"></div>
+            <div class="screen"><div class="tb">
+              <div class="tb-status"><span>9:41</span><span class="sb"><i style="height:5px"></i><i style="height:7px"></i><i style="height:9px"></i></span></div>
+              <div class="tt">
+                <div class="tt-head">
+                  <small>Upcoming trip</small>
+                  <h1>Santorini escape</h1>
+                  <div class="meta"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>May 14–21 · 2 travellers</div>
+                </div>
+                <div class="tt-body">
+                  <div class="tt-card">
+                    <span class="dot" style="background:#1967D2"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2a.5.5 0 0 0-.5.2L4 7c-.3.4-.1.9.3 1.1L9 11l-2 3H4l-1 1 3 1.5L7.5 19l1-1v-3l3-2 3 4.5c.2.4.7.6 1.1.3l.4-.3c.2-.3.3-.7.3-1.1z"/></svg></span>
+                    <span class="tt-line"></span>
+                    <div class="when">Wed · 09:40</div>
+                    <div class="ct">Flight TK 7420 → JTR</div>
+                    <div class="sub">Erbil → Santorini · Seat 4A</div>
+                    <span class="tag" style="background:#E7F6EC;color:#16A34A">Checked in</span>
+                  </div>
+                  <div class="tt-card">
+                    <span class="dot" style="background:#7C3AED"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z"/><path d="M10 18h4"/></svg></span>
+                    <span class="tt-line"></span>
+                    <div class="when">Wed · 15:00</div>
+                    <div class="ct">Azure Cove Suites</div>
+                    <div class="sub">7 nights · Sea-view suite</div>
+                    <span class="tag" style="background:#EAF1FC;color:#1967D2">Booked</span>
+                  </div>
+                  <div class="tt-card">
+                    <span class="dot" style="background:#F59E0B"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14l-1.5-6.5a2 2 0 0 0-2-1.5h-7a2 2 0 0 0-2 1.5L5 17z"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="16.5" cy="17.5" r="1.5"/></svg></span>
+                    <div class="when">Wed · 14:10</div>
+                    <div class="ct">Airport transfer</div>
+                    <div class="sub">Private pickup · Driver Nikos</div>
+                    <span class="tag" style="background:#FEF3E2;color:#B0700E">Prepaid</span>
+                  </div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+        <div class="tc-body">
+          <p class="eyebrow">Your trips</p>
+          <h3>Every booking, one timeline.</h3>
+          <p>Flights, hotels and transfers land in a single live itinerary that works offline — boarding passes and confirmations always a tap away.</p>
+          <a class="tc-cta" href="https://tulipbookings.com" target="_blank" rel="noopener">Explore trips <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Card 3 — concierge chat -->
+      <article class="tour-card tint-navy reveal">
+        <div class="tc-media">
+          <div class="tc-phone">
+            <div class="notch"></div>
+            <div class="screen"><div class="tb">
+              <div class="tb-status"><span>9:41</span><span class="sb"><i style="height:5px"></i><i style="height:7px"></i><i style="height:9px"></i></span></div>
+              <div class="cc">
+                <div class="cc-head">
+                  <span class="bk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg></span>
+                  <div class="av"><span class="on"></span></div>
+                  <div class="who"><b>Lana · Your advisor</b><span>Online now</span></div>
+                </div>
+                <div class="cc-body">
+                  <div class="cc-day">Today</div>
+                  <div class="cc-msg them">Morning, Aland. I've held two window seats on the 09:40 to Istanbul.</div>
+                  <div class="cc-sug">
+                    <div class="r1"><span class="lg">TK</span><b>Turkish Airlines · TK 7420</b></div>
+                    <div class="r2">09:40 → 12:15 · Seats 4A, 4B · Direct</div>
+                    <div class="cf">Confirm booking</div>
+                  </div>
+                  <div class="cc-msg me">Perfect — go ahead.</div>
+                  <div class="cc-msg them">Done. Boarding passes are in your timeline, and I've arranged your airport pickup.</div>
+                </div>
+                <div class="cc-input"><span class="box">Message Lana…</span><span class="snd"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></span></div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+        <div class="tc-body">
+          <p class="eyebrow">Concierge</p>
+          <h3>A real advisor, one tap away.</h3>
+          <p>Message your PeakTravel advisor inside the app for upgrades, changes and on-the-ground help — a real person, any time zone, day or night.</p>
+          <a class="tc-cta" href="#contact">Meet your advisor <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <!-- SERVICES -->
 <section id="services">
   <div class="wrap">
@@ -643,6 +950,17 @@
         <p>Real people, any time zone — rebookings, upgrades and on-the-ground help when plans change.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- MEDIA BAND — arrival -->
+<section class="band" data-screen-label="Media band — arrival">
+  <div class="band-img" style="background-image:url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1800&q=80'), url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1800&q=80');"></div>
+  <div class="band-scrim"></div>
+  <div class="wrap band-content reveal">
+    <div class="rule"></div>
+    <h2>Wherever you land, <span class="em">we're there.</span></h2>
+    <p class="sub">On the ground in 120 countries — one call away, any time zone.</p>
   </div>
 </section>
 
@@ -687,6 +1005,18 @@
         <div class="why"><div class="b"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20zM12 6v6l4 2"/></svg></div><div><h4>Always reachable</h4><p>Plans change. A real person answers, day or night, anywhere you are.</p></div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- MEDIA BAND — effortless -->
+<section class="band" data-screen-label="Media band — effortless">
+  <div class="band-img" style="background-image:url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1800&q=80'), url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1800&q=80');"></div>
+  <div class="band-scrim"></div>
+  <div class="wrap band-content reveal">
+    <div class="rule"></div>
+    <h2>The best journeys feel <span class="em">effortless.</span></h2>
+    <p class="sub">That's the work of a travel house — you just travel.</p>
+    <a href="#contact" class="btn btn-gold">Start planning</a>
   </div>
 </section>
 
@@ -741,26 +1071,34 @@
 </button>
 
 <script>
-  // mobile menu toggle
-  function toggleMenu(){
-    const m = document.getElementById('mobileMenu');
-    const b = document.getElementById('menuBtn');
-    const open = m.classList.toggle('open');
-    b.setAttribute('aria-expanded', open ? 'true' : 'false');
-    b.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    document.getElementById('mi1').setAttribute('d', open ? 'M6 6l12 12' : 'M4 7h16');
-    document.getElementById('mi2').setAttribute('d', open ? 'M12 12h0' : 'M4 12h16');
-    document.getElementById('mi3').setAttribute('d', open ? 'M6 18L18 6' : 'M4 17h16');
-    document.getElementById('mi2').style.opacity = open ? '0' : '1';
+  // fullscreen menu takeover
+  const mega = document.getElementById('mega');
+  const megaBtn = document.getElementById('megaBtn');
+  let megaOpen = false;
+  function syncMegaBtn(){
+    megaBtn.querySelector('.mt-label').textContent = megaOpen ? 'Close' : 'Menu';
+    megaBtn.setAttribute('aria-expanded', megaOpen ? 'true' : 'false');
+    megaBtn.setAttribute('aria-label', megaOpen ? 'Close menu' : 'Open menu');
   }
-  function closeMenu(){
-    const m = document.getElementById('mobileMenu');
-    if (m.classList.contains('open')) toggleMenu();
-  }
+  function openMega(){ if (megaOpen) return; megaOpen = true; mega.classList.add('open'); mega.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; syncMegaBtn(); }
+  function closeMega(){ if (!megaOpen) return; megaOpen = false; mega.classList.remove('open'); mega.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; syncMegaBtn(); }
+  function toggleMega(){ megaOpen ? closeMega() : openMega(); }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMega(); });
+  const mvImgs = [...document.querySelectorAll('.mega-visual .mv-img')];
+  document.querySelectorAll('.mega-links a').forEach(a => {
+    a.addEventListener('pointerenter', () => {
+      const i = +a.dataset.mv;
+      mvImgs.forEach((m, k) => m.classList.toggle('on', k === i));
+    });
+  });
 
-  // header shadow on scroll
+  // header: transparent over hero, solid after
   const header = document.getElementById('top');
-  const onScroll = () => { header.classList.toggle('scrolled', window.scrollY > 8); };
+  const onScroll = () => {
+    const clear = window.scrollY < window.innerHeight * 0.55;
+    header.classList.toggle('clear', clear);
+    header.classList.toggle('scrolled', !clear);
+  };
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 
   // reveal: visible by default; only below-fold elements start hidden and animate in
@@ -772,16 +1110,7 @@
   window.addEventListener('load', revealNow);
   window.addEventListener('resize', revealNow);
 
-  // active nav link based on scroll position
-  const links = [...document.querySelectorAll('.nav-links a')];
-  const sections = ['services','destinations','tulip','about','contact'].map(id => document.getElementById(id)).filter(Boolean);
-  function setActive(){
-    const y = window.scrollY + window.innerHeight * 0.32;
-    let current = '';
-    sections.forEach(s => { if (s.offsetTop <= y) current = s.id; });
-    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
-  }
-  window.addEventListener('scroll', setActive, { passive: true }); setActive();
+  // (inline nav removed — navigation lives in the fullscreen menu)
 
   // scroll-scrubbed showcase: phones rise with scroll until fully in view
   const stage = document.getElementById('tulip-stage');
@@ -901,6 +1230,44 @@
     window.addEventListener('scroll', toggleTop, { passive: true }); toggleTop();
     toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }));
   }
+
+  // cinematic hero slideshow (Ken Burns)
+  (function () {
+    const slides = [...document.querySelectorAll('.cine-slide')];
+    if (!slides.length) return;
+    slides.forEach(s => { const m = s.style.backgroundImage.match(/url\("?([^")]+)"?\)/); if (m) { const im = new Image(); im.src = m[1]; } });
+    if (reduced) return;
+    const caps = ['The coastlines', 'The cities', 'The peaks', 'The islands'];
+    const bars = [...document.querySelectorAll('.cine-bars span')];
+    const capEl = document.getElementById('cineCap');
+    let i = 0;
+    setInterval(() => {
+      slides[i].classList.remove('on'); if (bars[i]) bars[i].classList.remove('on');
+      i = (i + 1) % slides.length;
+      slides[i].classList.add('on'); if (bars[i]) bars[i].classList.add('on');
+      if (capEl) { capEl.style.opacity = '0'; setTimeout(() => { capEl.textContent = caps[i] || ''; capEl.style.opacity = '1'; }, 300); }
+    }, 6500);
+  })();
+
+  // media band parallax
+  (function () {
+    const bands = [...document.querySelectorAll('.band')];
+    if (!bands.length || reduced) return;
+    let rafB = 0;
+    function par() {
+      rafB = 0;
+      const vh = window.innerHeight;
+      bands.forEach(b => {
+        const r = b.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const img = b.querySelector('.band-img');
+        if (img) img.style.transform = 'translateY(' + (((r.top + r.height / 2) - vh / 2) * -0.12).toFixed(1) + 'px)';
+      });
+    }
+    window.addEventListener('scroll', () => { if (!rafB) rafB = requestAnimationFrame(par); }, { passive: true });
+    window.addEventListener('resize', par);
+    par();
+  })();
 
   // Destinations — Route Board constellation
   (function () {
