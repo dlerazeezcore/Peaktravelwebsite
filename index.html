@@ -95,10 +95,10 @@
   .mt-icon i:first-child { top: 1px; }
   .mt-icon i:last-child { top: 9px; }
   @media (max-width: 880px) { .nav-cta { display: none; } }
-  .nav-fb { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:#1877F2; border:1px solid #1877F2; color:#fff; transition: background var(--pt-dur), transform var(--pt-dur), box-shadow var(--pt-dur); }
-  .nav-fb:hover { background:#0F6AE0; border-color:#0F6AE0; color:#fff; transform: translateY(-1px); box-shadow: 0 6px 18px -6px rgba(24,119,242,.6); }
-  header.clear .nav-fb { color:#fff; border-color:#1877F2; }
-  header.clear .nav-fb:hover { color:#fff; border-color:#0F6AE0; }
+  .nav-fb { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; background:#1877F2; overflow:hidden; color:#fff; transition: background var(--pt-dur), transform var(--pt-dur), box-shadow var(--pt-dur); box-shadow: 0 4px 14px -6px rgba(24,119,242,.55); }
+  .nav-fb:hover { background:#0F6AE0; color:#fff; transform: translateY(-2px); box-shadow: 0 10px 22px -8px rgba(24,119,242,.7); }
+  .nav-fb svg { display:block; }
+  header.clear .nav-fb { color:#fff; }
 
   /* ---------- Fullscreen menu takeover ---------- */
   .mega {
@@ -620,7 +620,7 @@
     <a href="#home" class="logo"><span class="peak">Peak</span><span class="travel">Travel</span></a>
     <div class="nav-right">
       <a href="https://www.facebook.com/peaktravelebl" target="_blank" rel="noopener" class="nav-fb" aria-label="PeakTravel on Facebook">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14 8.5V7c0-.7.3-1 1-1h1.5V3H14a3.5 3.5 0 0 0-3.5 3.5V8.5H8.5v3h2v9h3.5v-9h2.3l.4-3z"/></svg>
+        <svg width="42" height="42" viewBox="0 0 36 36" fill="currentColor" aria-hidden="true"><path d="M20.6 36V22.36h4.57l.68-5.31H20.6v-3.39c0-1.54.43-2.58 2.63-2.58l2.81 0V6.53c-.49-.06-2.16-.21-4.1-.21-4.06 0-6.84 2.48-6.84 7.03v3.7h-4.59v5.31h4.59V36H20.6z"/></svg>
       </a>
       <a href="#contact" class="btn btn-gold nav-cta">Plan a Trip</a>
       <button class="menu-trigger" id="megaBtn" aria-expanded="false" aria-label="Open menu" onclick="toggleMega()">
