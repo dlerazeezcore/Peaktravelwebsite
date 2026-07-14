@@ -95,6 +95,10 @@
   .mt-icon i:first-child { top: 1px; }
   .mt-icon i:last-child { top: 9px; }
   @media (max-width: 880px) { .nav-cta { display: none; } }
+  .nav-fb { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:#1877F2; border:1px solid #1877F2; color:#fff; transition: background var(--pt-dur), transform var(--pt-dur), box-shadow var(--pt-dur); }
+  .nav-fb:hover { background:#0F6AE0; border-color:#0F6AE0; color:#fff; transform: translateY(-1px); box-shadow: 0 6px 18px -6px rgba(24,119,242,.6); }
+  header.clear .nav-fb { color:#fff; border-color:#1877F2; }
+  header.clear .nav-fb:hover { color:#fff; border-color:#0F6AE0; }
 
   /* ---------- Fullscreen menu takeover ---------- */
   .mega {
@@ -343,6 +347,9 @@
   .footer ul a:hover { color:#fff; }
   .footer .bottom { margin-top: 48px; padding-top: 22px; border-top:1px solid rgba(255,255,255,.08); display:flex; justify-content:space-between; align-items:center; font-size:13px; color:#7A879C; flex-wrap:wrap; gap:12px; }
   .footer .bottom .dot { color: var(--gold); }
+  .footer .socials { display:flex; gap:10px; align-items:center; }
+  .footer .socials a { display:inline-flex; align-items:center; justify-content:center; width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.14); color:#9CA9BD; transition: color var(--pt-dur), border-color var(--pt-dur), transform var(--pt-dur); }
+  .footer .socials a:hover { color:#fff; border-color: var(--gold); transform: translateY(-2px); }
   @media (max-width:880px){ .footer-grid{grid-template-columns:1fr 1fr; gap:32px;} }
 
   /* ---- Tulip app mock screens ---- */
@@ -612,6 +619,9 @@
   <div class="wrap nav">
     <a href="#home" class="logo"><span class="peak">Peak</span><span class="travel">Travel</span></a>
     <div class="nav-right">
+      <a href="https://www.facebook.com/peaktravelebl" target="_blank" rel="noopener" class="nav-fb" aria-label="PeakTravel on Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M14 8.5V7c0-.7.3-1 1-1h1.5V3H14a3.5 3.5 0 0 0-3.5 3.5V8.5H8.5v3h2v9h3.5v-9h2.3l.4-3z"/></svg>
+      </a>
       <a href="#contact" class="btn btn-gold nav-cta">Plan a Trip</a>
       <button class="menu-trigger" id="megaBtn" aria-expanded="false" aria-label="Open menu" onclick="toggleMega()">
         <span class="mt-label">Menu</span>
@@ -1061,6 +1071,17 @@
     </div>
     <div class="bottom">
       <span>© 2026 PeakTravel. All rights reserved.</span>
+      <div class="socials">
+        <a href="https://www.facebook.com/peaktravelebl" target="_blank" rel="noopener" aria-label="PeakTravel on Facebook">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h-2.5A3.5 3.5 0 0 0 9 6.5V9H6.5v3H9v9h3v-9h2.5l.5-3H12V6.5a.5.5 0 0 1 .5-.5H15z"/></svg>
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="PeakTravel on Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" target="_blank" rel="noopener" aria-label="PeakTravel on LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7"/></svg>
+        </a>
+      </div>
       <span>Privacy <span class="dot">·</span> Terms <span class="dot">·</span> Cookies</span>
     </div>
   </div>
