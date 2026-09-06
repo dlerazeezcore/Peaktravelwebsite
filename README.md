@@ -9,6 +9,7 @@ Static single-page site, hosted on GitHub Pages.
 - `index.html` — the complete page (all page CSS/JS inline)
 - `styles.css` + `tokens/` — PeakTravel design tokens (colors, fonts, typography, spacing)
 - `assets/` — favicon and helpers
+- `card/` — staff card pages (NFC/QR business cards); see `card/README.md`
 
 ## Notes
 
