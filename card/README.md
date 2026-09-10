@@ -39,14 +39,24 @@ The slug is the URL, so `card/rawezh-qasm/` resolves at
 
 ## Serving `contact.vcf`
 
-The file must come back as `Content-Type: text/vcard; charset=utf-8` for the
-native contact sheet to open. GitHub Pages sets this from the extension — check
-it after deploy with:
+GitHub Pages serves these as `text/x-vcard`, set from the file extension. That
+is correct and needs no change — Android's contact importer registers for
+`text/x-vcard`, `text/vcard` and `text/directory` alike, and iOS accepts both
+vCard types. Verified 2026-09-10.
 
-    curl -sI https://peaktravel.net/card/rawezh-qasm/contact.vcf | grep -i content-type
+**Never put a `download` attribute on the vCard link.** It tells the browser to
+write the file to storage instead of handing it to the OS, which overrides
+content-type handling entirely — Android then saves a dead file instead of
+opening the contact importer, and iOS 13+ saves to Files instead of showing the
+contact sheet. No amount of server MIME configuration can undo it.
 
-If the site ever moves off GitHub Pages: on Apache add `AddType text/vcard .vcf`
-to `.htaccess`; on nginx add `text/vcard vcf;` to `mime.types`.
+Expect a platform difference when testing: iOS Safari shows an inline contact
+preview, while Android has none — it routes the file through Downloads or an
+"Open with" chooser into Contacts. That is normal, not a bug.
+
+To re-check the type after a deploy (PowerShell):
+
+    curl.exe -sI https://peaktravel.net/card/rawezh-qasm/contact.vcf | findstr /i "content-type"
 
 ## Not built yet
 
