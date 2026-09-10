@@ -52,7 +52,16 @@ contact sheet. No amount of server MIME configuration can undo it.
 
 Expect a platform difference when testing: iOS Safari shows an inline contact
 preview, while Android has none — it routes the file through Downloads or an
-"Open with" chooser into Contacts. That is normal, not a bug.
+"Open with" chooser into Contacts. That is normal, not a bug, and it is the
+ceiling on Android: a web page cannot hand a contact to the Contacts app, only
+the OS can, and only once the file is on disk.
+
+Verified on a Galaxy A52 (Samsung Internet), 2026-09-10: download, then tap the
+file, then "Open with Contacts" — imports correctly. Samsung Internet reports no
+Web Share **file** support, so the page's share-sheet path falls back to a plain
+download there; it stays in place for Android browsers that do support it. The
+button carries a line telling Android users to tap the downloaded file, so a
+saved file does not read as a failure.
 
 To re-check the type after a deploy (PowerShell):
 
