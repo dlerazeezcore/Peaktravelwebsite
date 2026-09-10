@@ -56,7 +56,7 @@ a{text-decoration:none}
   </div>
 
   <div style="padding:14px 20px 0">
-    <a href="contact.vcf" type="text/vcard" style="display:flex;align-items:center;justify-content:center;gap:9px;height:50px;border-radius:999px;border:1px solid #C8A24B;color:#0B2040;font-size:13.5px;font-weight:600">
+    <a href="contact.vcf" type="text/vcard" id="vcf" style="display:flex;align-items:center;justify-content:center;gap:9px;height:50px;border-radius:999px;border:1px solid #C8A24B;color:#0B2040;font-size:13.5px;font-weight:600">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#C8A24B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/></svg>
       Save to contacts</a>
   </div>
@@ -126,5 +126,35 @@ a{text-decoration:none}
     <div style="font-size:10px;color:#7C8CA6;line-height:1.6">A travel house, not a booking site. This page is the digital credential of a PeakTravel employee; details are maintained by the company.</div>
   </div>
 </div>
+<script>
+(function(){
+  var a=document.getElementById('vcf');
+  if(!a||!/Android/i.test(navigator.userAgent))return;
+
+  var hint=document.createElement('div');
+  hint.textContent='Opens in Contacts after saving';
+  hint.setAttribute('style','text-align:center;font-size:11px;color:#6B7482;margin-top:9px');
+  a.parentNode.appendChild(hint);
+
+  function fallback(){
+    var l=document.createElement('a');
+    l.href=a.href; l.download='Rawezh-Qasm.vcf';
+    document.body.appendChild(l); l.click(); l.remove();
+  }
+
+  a.addEventListener('click',function(e){
+    if(!(navigator.share&&navigator.canShare))return;
+    e.preventDefault();
+    fetch(a.href).then(function(r){return r.blob()}).then(function(b){
+      var f=new File([b],'Rawezh-Qasm.vcf',{type:'text/vcard'});
+      if(!navigator.canShare({files:[f]}))throw new Error('nofiles');
+      return navigator.share({files:[f]});
+    }).catch(function(err){
+      if(err&&err.name==='AbortError')return;
+      fallback();
+    });
+  });
+})();
+</script>
 </body>
 </html>
